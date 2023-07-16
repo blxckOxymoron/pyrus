@@ -1,3 +1,10 @@
+import LetterPractice from "./letter-practice";
+
 export default function Practice() {
-  return <em className="text-center">practice handwriting</em>;
+  return (
+    <div>
+      <em>practice</em>
+      <LetterPractice />
+    </div>
+  );
 }
