@@ -140,7 +140,10 @@ export default function useDrawableCanvas({
         : defaultPressure;
     }
 
-    let lineWidth = calculateLineWidth(pressure, strokeWidth);
+    let lineWidth = calculateLineWidth(
+      pressure,
+      strokeWidth * resolutionMultiplier,
+    );
     if (preveousPoint) {
       lineWidth = lineWidth * 0.3 + preveousPoint.lineWidth * 0.7;
     }

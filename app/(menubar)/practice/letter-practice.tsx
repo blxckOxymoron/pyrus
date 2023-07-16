@@ -6,7 +6,7 @@ export default function LetterPractice() {
   const { bindings } = useDrawableCanvas({
     width: 600,
     height: 600,
-    strokeWidth: 15,
+    strokeWidth: 8,
     onCompleted({ lines, data }) {
       console.log("completed", lines, data);
     },
