@@ -9,12 +9,12 @@ export default function LetterPractice() {
   const [savedImages, setSavedImages] = useState<string[]>([]);
 
   useEffect(() => {
-    localStorage.setItem("savedImages", JSON.stringify(savedImages));
-  }, [savedImages]);
-
-  useEffect(() => {
     setSavedImages(JSON.parse(localStorage.getItem("savedImages") ?? "[]"));
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("savedImages", JSON.stringify(savedImages));
+  }, [savedImages]);
 
   //! TODO LIMIT SAVED IMAGES AND LOAD THEM DYNAMICALLY
 
