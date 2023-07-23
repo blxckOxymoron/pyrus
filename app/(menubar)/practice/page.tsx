@@ -1,4 +1,4 @@
-import LetterPractice from "./letter-practice";
+import LetterPractice from "./LetterPractice";
 
 export default function Practice() {
   return (

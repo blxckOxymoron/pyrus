@@ -1,5 +1,5 @@
-import BackButton from "./back-button";
-import Breadcrumbs from "./breadcurumbs";
+import BackButton from "./BackButton";
+import Breadcrumbs from "./Breadcrumbs";
 
 export default function PageLayout({
   children,

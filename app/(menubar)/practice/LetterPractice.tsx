@@ -1,20 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import useDrawableCanvas from "./use-drawable-canvas";
+import useDrawableCanvas from "./useDrawableCanvas";
 
 import Image from "next/image";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function LetterPractice() {
-  const [savedImages, setSavedImages] = useState<string[]>([]);
-
-  useEffect(() => {
-    setSavedImages(JSON.parse(localStorage.getItem("savedImages") ?? "[]"));
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("savedImages", JSON.stringify(savedImages));
-  }, [savedImages]);
+  const [savedImages, setSavedImages] = useLocalStorage<string[]>(
+    "savedImages",
+    [],
+  );
 
   //! TODO LIMIT SAVED IMAGES AND LOAD THEM DYNAMICALLY
 

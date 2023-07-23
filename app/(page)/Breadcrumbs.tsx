@@ -12,10 +12,13 @@ export default function Breadcrumbs() {
   }));
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-4">
       {pathsAndSegments.map(({ segment, path }, i) => (
         <Link
-          className={`after:ml-2 after:text-zinc-400 after:content-['/'] last:after:content-none`}
+          className={
+            "relative after:absolute after:-right-3 after:text-zinc-400 after:content-['/'] last:after:content-none hover:underline" +
+            (i === 0 ? " font-semibold" : "")
+          }
           href={path}
           key={i}
         >

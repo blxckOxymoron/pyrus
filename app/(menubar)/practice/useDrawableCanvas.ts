@@ -6,7 +6,6 @@ import {
   useState,
   type TouchEvent,
   type MouseEvent,
-  Attributes,
   CanvasHTMLAttributes,
   DetailedHTMLProps,
 } from "react";
