@@ -119,7 +119,7 @@ export default function LetterPractice({
           ))
           .reverse()}
         {!savedImages.length && (
-          <small className="text-zinc-400">
+          <small className="text-zinc-400 opacity-100 transition-opacity duration-var group-[[data-animating]]/practice:opacity-0">
             written letters will show up here
           </small>
         )}
