@@ -27,7 +27,7 @@ export default function MenubarLayout({
           fonts
         </Link>
       </nav>
-      <div>{children}</div>
+      {children}
     </main>
   );
 }

@@ -13,7 +13,7 @@ export default function PageLayout({
         <hr className="block h-auto w-0 border-l border-zinc-400" />
         <Breadcrumbs />
       </nav>
-      <div>{children}</div>
+      {children}
     </main>
   );
 }
