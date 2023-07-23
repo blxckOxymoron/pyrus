@@ -66,6 +66,7 @@ export default function useDrawableCanvas({
     CanvasHTMLAttributes<HTMLCanvasElement>,
     HTMLCanvasElement
   >;
+  clear: () => void;
 } {
   // with help of https://github.com/shuding/apple-pencil-safari-api-test/blob/gh-pages/index.js
 
@@ -84,11 +85,9 @@ export default function useDrawableCanvas({
 
     const data = canvas.toDataURL("image/png");
     onCompleted({ lines, data });
-
-    // reset canvas
-    ctx?.clearRect(0, 0, canvas.width, canvas.height);
-    setLines([]);
     setHasDrawnSomething(false);
+
+    //* reset canvas must be handled in on completed with clear()
   }, [ctx, lines, onCompleted]);
 
   // save image on end of drawing
@@ -236,5 +235,15 @@ export default function useDrawableCanvas({
         touchAction: "none",
       },
     },
+    clear: useCallback(() => {
+      ctx?.clearRect(
+        0,
+        0,
+        width * resolutionMultiplier,
+        height * resolutionMultiplier,
+      );
+      setLines([]);
+      setHasDrawnSomething(false);
+    }, [ctx, height, resolutionMultiplier, width]),
   };
 }

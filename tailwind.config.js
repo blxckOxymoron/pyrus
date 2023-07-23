@@ -6,7 +6,17 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        "var": "var(--h)",
+      },
+      width: {
+        "var": "var(--w)",
+      },
+      transitionDuration: {
+        "var": "var(--duration)",
+      }
+    },
   },
   plugins: [],
 };

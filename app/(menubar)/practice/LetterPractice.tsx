@@ -5,6 +5,9 @@ import useDrawableCanvas from "./useDrawableCanvas";
 import Image from "next/image";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { TrashIcon } from "@primer/octicons-react";
+import { useRef, useState } from "react";
+
+const animationDuration = 300;
 
 export default function LetterPractice({
   letter,
@@ -19,52 +22,83 @@ export default function LetterPractice({
   height?: number;
   guides?: number[];
 }) {
-  const [savedImages, setSavedImages] = useLocalStorage<string[]>(
-    ["practice", font, letter].join("/"),
-    [],
-  );
+  const [isAnimating, setIsAnimating] = useState(false);
+  const letterRef = useRef<HTMLDivElement>(null);
+
+  const [savedImages, setSavedImages] = useLocalStorage<
+    {
+      id: string;
+      data: string;
+    }[]
+  >(["practice", font, letter].join("/"), []);
 
   //! TODO LIMIT SAVED IMAGES AND LOAD THEM DYNAMICALLY
 
-  const { bindings } = useDrawableCanvas({
+  const { bindings, clear: clearCanvas } = useDrawableCanvas({
     width,
     height,
     strokeWidth: 8,
     onCompleted({ data }) {
-      // TODO proper key with hash
-      setSavedImages((savedImages) => [...savedImages, data]);
+      const id = Date.now().toString(36);
+      setIsAnimating(true);
+      letterRef.current?.scrollTo({
+        left: 0,
+        behavior: "smooth",
+      });
+      setTimeout(() => {
+        setSavedImages((savedImages) => [...savedImages, { data, id }]);
+        clearCanvas();
+        setIsAnimating(false);
+      }, animationDuration);
     },
   });
 
   return (
-    <div className="relative flex max-w-full items-center gap-4">
-      {guides.map((guide, i) => (
-        <div
-          key={i}
-          className="pointer-events-none absolute w-full border-b-2 border-dotted border-zinc-400"
-          style={{
-            top: `${guide}%`,
-            width,
-          }}
-        ></div>
-      ))}
-      <span
-        className="pointer-events-none absolute pb-3 text-center text-7xl opacity-50"
-        style={{ width }}
-      >
-        {letter}
-      </span>
+    <div
+      className="group/practice relative flex max-w-full items-center gap-4 overflow-hidden rounded-lg pl-3"
+      data-animating={isAnimating ? "" : undefined}
+      style={
+        {
+          "--w": width + "px",
+          "--h": height + "px",
+          "--duration": animationDuration + "ms",
+        } as any
+      }
+    >
+      <div className="pointer-events-none absolute h-var w-var opacity-100 transition-opacity group-[[data-animating]]/practice:opacity-0">
+        {guides.map((guide, i) => (
+          <div
+            key={i}
+            className="absolute w-var border-b-2 border-dotted border-zinc-400"
+            style={{
+              top: `${guide}%`,
+            }}
+          ></div>
+        ))}
+        <span className="absolute top-1/2 w-var -translate-y-1/2 pb-3 text-center text-7xl opacity-50">
+          {letter}
+        </span>
+      </div>
+
+      <span className="absolute left-3 -z-10 h-var w-var origin-left -translate-x-3 scale-75 transform rounded-lg border border-zinc-400 transition-transform duration-var group-[[data-animating]]/practice:translate-x-0 group-[[data-animating]]/practice:scale-100" />
+
       <canvas
         {...bindings}
-        className="flex-shrink-0 rounded-lg border border-zinc-400"
+        className="flex-shrink-0 rounded-lg border border-zinc-400 bg-black transition-transform duration-0 group-[[data-animating]]/practice:translate-x-[calc(100%+16px)] group-[[data-animating]]/practice:duration-var"
       ></canvas>
 
-      <div className="flex flex-shrink flex-row gap-4 overflow-x-scroll rounded-lg">
+      <div
+        className="transition-transfom flex flex-shrink snap-x flex-row gap-4 overflow-x-scroll rounded-lg duration-0 group-[[data-animating]]/practice:translate-x-[calc(var(--w)+16px)] group-[[data-animating]]/practice:duration-var"
+        ref={letterRef}
+      >
         {savedImages
-          .map((data, i) => (
-            <div key={i} className="group relative flex-shrink-0">
+          .map((img, i) => (
+            <div
+              key={img.id}
+              className="group relative flex-shrink-0 snap-start"
+            >
               <Image
-                src={data}
+                src={img.data}
                 alt={`image ${i}`}
                 width={width}
                 height={height}
