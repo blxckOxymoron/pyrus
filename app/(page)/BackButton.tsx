@@ -3,16 +3,10 @@
 import { useRouter } from "next/navigation";
 
 import { ChevronLeftIcon } from "@primer/octicons-react";
+import IconButton from "@/components/IconButton";
 
 export default function BackButton() {
   const router = useRouter();
 
-  return (
-    <button
-      onClick={router.back}
-      className="inline-flex aspect-square items-center justify-center rounded-md font-semibold transition-colors hover:bg-gray-800"
-    >
-      <ChevronLeftIcon />
-    </button>
-  );
+  return <IconButton icon={<ChevronLeftIcon />} onClick={router.back} />;
 }

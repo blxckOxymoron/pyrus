@@ -6,14 +6,13 @@ import Image from "next/image";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { TrashIcon } from "@primer/octicons-react";
 import { useRef, useState } from "react";
-
-const animationDuration = 300;
+import { animationDuration, canvasHeight, canvasWidth } from "./constants";
 
 export default function LetterPractice({
   letter,
   font,
-  width = 70,
-  height = 100,
+  width = canvasWidth, // to allow for multiple letters to get wider canvas
+  height = canvasHeight,
   guides = [17, 30, 70, 85],
 }: {
   letter: string;
@@ -55,7 +54,7 @@ export default function LetterPractice({
 
   return (
     <div
-      className="group/practice relative flex max-w-full items-center gap-4 overflow-hidden rounded-lg pl-3"
+      className="group/practice relative flex max-w-full -translate-x-3 items-center gap-4 overflow-hidden rounded-lg pl-3"
       data-animating={isAnimating ? "" : undefined}
       style={
         {
@@ -64,6 +63,7 @@ export default function LetterPractice({
           "--duration": animationDuration + "ms",
         } as any
       }
+      id={"letter-" + letter}
     >
       <div className="pointer-events-none absolute h-var w-var opacity-100 transition-opacity group-[[data-animating]]/practice:opacity-0">
         {guides.map((guide, i) => (
@@ -80,7 +80,7 @@ export default function LetterPractice({
         </span>
       </div>
 
-      <span className="absolute left-3 -z-10 h-var w-var origin-left -translate-x-3 scale-75 transform rounded-lg border border-zinc-400 transition-transform duration-var group-[[data-animating]]/practice:translate-x-0 group-[[data-animating]]/practice:scale-100" />
+      <span className="absolute left-3 -z-10 h-var w-var origin-left scale-50 transform rounded-lg border border-zinc-400 transition-transform duration-var group-[[data-animating]]/practice:scale-100" />
 
       <canvas
         {...bindings}
@@ -92,14 +92,14 @@ export default function LetterPractice({
         ref={letterRef}
       >
         {savedImages
-          .map((img, i) => (
+          .map((img) => (
             <div
               key={img.id}
               className="group relative flex-shrink-0 snap-start"
             >
               <Image
                 src={img.data}
-                alt={`image ${i}`}
+                alt={`image ${img.id}`}
                 width={width}
                 height={height}
                 className="rounded-lg border border-zinc-400"
@@ -108,7 +108,7 @@ export default function LetterPractice({
                 className="absolute right-2 top-2 h-max rounded-full leading-3 text-red-500 opacity-0 transition-opacity group-hover:opacity-100"
                 onClick={() =>
                   setSavedImages((savedImages) =>
-                    savedImages.filter((_, j) => j !== i),
+                    savedImages.filter((i) => i.id !== img.id),
                   )
                 }
                 title="delete"

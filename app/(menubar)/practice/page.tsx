@@ -1,16 +1,14 @@
 import LetterPractice from "./LetterPractice";
 
 export default function Practice() {
+  const letters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split("");
+
   return (
-    <div className="flex w-[min(100dvw,72rem)] flex-col gap-4 p-4">
-      <em>practice</em>
-      {Array.from({ length: 26 }, (_, i) => (
-        <LetterPractice
-          key={i}
-          letter={String.fromCharCode(97 + i)}
-          font="inter"
-        />
+    <>
+      {letters.map((letter, i) => (
+        <LetterPractice key={i} letter={letter} font="inter" />
       ))}
-    </div>
+    </>
   );
 }

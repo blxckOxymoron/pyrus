@@ -15,6 +15,9 @@ module.exports = {
       },
       transitionDuration: {
         "var": "var(--duration)",
+      },
+      lineHeight: {
+        "0": 0,
       }
     },
   },
